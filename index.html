@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave2Joy - Web Edition</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Wave2Joy</h1>
+            <p id="status">Status: No Controller Detected. Press any button on your controller.</p>
+        </header>
+
+        <main class="app-body">
+            <!-- Control Panel -->
+            <div class="panel controls">
+                <h2>Controls</h2>
+
+                <!-- Mode Selector -->
+                <div class="control-group">
+                    <label for="modeSelect">Mode</label>
+                    <select id="modeSelect">
+                        <option value="stochastic">Stochastic</option>
+                        <option value="breathing_pulse" selected>Breathing Pulse</option>
+                        <option value="cycle">Cycle</option>
+                        <option value="constant_weak">Constant Weak</option>
+                        <option value="constant_strong">Constant Strong</option>
+                        <option value="constant_max">Constant Max</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <!-- General Settings -->
+                <div class="control-group">
+                    <label for="sessionLength">
+                        Session Length (s)
+                        <span class="tooltip-container">
+                            <span class="tooltip-icon">?</span>
+                            <span class="tooltip-text">How long the vibration session will last in seconds.</span>
+                        </span>
+                    </label>
+                    <input type="range" id="sessionLength" min="10" max="3600" value="60" step="10">
+                    <span id="sessionLengthValue">60s</span>
+                </div>
+                <div class="control-group">
+                    <label for="maxIntensity">
+                        Max Intensity
+                        <span class="tooltip-container">
+                            <span class="tooltip-icon">?</span>
+                            <span class="tooltip-text">The absolute maximum vibration strength. Used in 'Breathing Pulse' and 'Constant Max' modes.</span>
+                        </span>
+                    </label>
+                    <input type="range" id="maxIntensity" min="10" max="255" value="255" step="5">
+                    <span id="maxIntensityValue">255</span>
+                </div>
+
+                <!-- Stochastic-Specific Settings -->
+                <div id="stochasticSettings" class="settings-group hidden">
+                    <h3>Stochastic Settings</h3>
+                    <div class="control-group">
+                        <label for="peakTime">
+                            Peak Time (s)
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">How long it takes for vibrations to gradually build up from weak to their full random potential.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="peakTime" min="10" max="3600" value="60" step="10">
+                        <span id="peakTimeValue">60s</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="weakIntensity">
+                            Weak Intensity
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">The lowest possible random vibration strength.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="weakIntensity" min="10" max="255" value="60" step="5">
+                        <span id="weakIntensityValue">60</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="strongIntensity">
+                            Strong Intensity
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">The highest possible random vibration strength.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="strongIntensity" min="10" max="255" value="160" step="5">
+                        <span id="strongIntensityValue">160</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="buzzMin">
+                            Min Buzz (ms)
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">The shortest possible time a single vibration burst can last.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="buzzMin" min="50" max="1000" value="100" step="10">
+                        <span id="buzzMinValue">100ms</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="buzzMax">
+                            Max Buzz (ms)
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">The longest possible time a single vibration burst can last.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="buzzMax" min="100" max="3000" value="2000" step="50">
+                        <span id="buzzMaxValue">2000ms</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="maxGap">
+                            Max Gap (ms)
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">The longest possible pause between vibration bursts.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="maxGap" min="100" max="3000" value="270" step="50">
+                        <span id="maxGapValue">270ms</span>
+                    </div>
+                </div>
+
+                <!-- Breathing Pulse-Specific Settings -->
+                <div id="breathingPulseSettings" class="settings-group">
+                    <h3>Breathing Pulse Settings</h3>
+                    <div class="control-group">
+                        <label for="breathingPulseMinIntensity">
+                            Min Intensity
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">The lowest point of the gentle, wave-like pulse.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="breathingPulseMinIntensity" min="10" max="255" value="80" step="5">
+                        <span id="breathingPulseMinIntensityValue">80</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="breathingPulsePeriod">
+                            Breathing Period (s)
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">The main speed of the 'breathing' effect. Lower values mean a faster pulse.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="breathingPulsePeriod" min="2.0" max="30.0" value="4.0" step="0.5">
+                        <span id="breathingPulsePeriodValue">4.0s</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="breathingPulseSyncPeriod">
+                            Sync Period (s)
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">How often the two motors perfectly sync up. Higher values create a longer-lasting 'beat' effect.</span>
+                            </span>
+                        </label>
+                        <input type="range" id="breathingPulseSyncPeriod" min="4.0" max="100.0" value="4.0" step="1.0">
+                        <span id="breathingPulseSyncPeriodValue">4.0s</span>
+                    </div>
+                </div>
+
+                <div class="session-buttons">
+                    <button id="startButton">Start Session</button>
+                    <button id="stopButton" disabled>Stop Session</button>
+                </div>
+            </div>
+
+            <!-- Visualizer Panel -->
+            <div class="panel visualizer">
+                <h2>Live Output</h2>
+                <p id="timer">Time: 0s / 60s</p>
+                <div class="vis-bar-group">
+                    <label>Left Motor (Low Freq)</label>
+                    <div class="vis-bar-track">
+                        <div class="vis-bar-fill" id="leftMotorBar"></div>
+                    </div>
+                    <span id="leftMotorValue">0</span>
+                </div>
+                <div class="vis-bar-group">
+                    <label>Right Motor (High Freq)</label>
+                    <div class="vis-bar-track">
+                        <div class="vis-bar-fill" id="rightMotorBar" style="background-color: #64c8ff;"></div>
+                    </div>
+                    <span id="rightMotorValue">0</span>
+                </div>
+                <div id="liveInfoBox" class="info-box">
+                    <p><strong>Phase:</strong> <span id="phaseInfo">IDLE</span></p>
+                    <p><strong>Intensity:</strong> <span id="intensityInfo">0%</span></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
